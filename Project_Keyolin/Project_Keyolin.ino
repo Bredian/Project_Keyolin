@@ -45,6 +45,8 @@ void setup(){
   
   Serial.begin(9600);
   
+  //Keyboard initialization
+  Keyboard.begin();
   //LED pins
   pinMode(7,OUTPUT);
   pinMode(6,OUTPUT);
@@ -174,52 +176,44 @@ void reset(){//clean out some variables
   maxSlope = 0;//reset slope
 }
 
-//Turn off 5 out the 6 LEDs for the guitar strings
-void otherLEDsOff(int LED1, int LED2,int LED3,int LED4,int LED5){
-  digitalWrite(LED1,0);  
-  digitalWrite(LED2,0);
-  digitalWrite(LED3,0);
-  digitalWrite(LED4,0);
-  digitalWrite(LED5,0);
-}
 
-//Determine the correct frequency and light up 
-//the appropriate LED for the string being played 
+
+//Determine the correct frequency 
 void stringCheck(){
   if(frequency>70 && frequency<90){
-    otherLEDsOff(2,3,5,6,7);
+
     digitalWrite(2,1);
     correctFrequency = 82.4;
   }
   if(frequency>100 && frequency<120){
-    otherLEDsOff(2,3,4,5,6);
+    
     digitalWrite(3,1);
     correctFrequency = 110;
   }
   if(frequency>135 && frequency<155){
-    otherLEDsOff(2,3,4,6,7);
+    
     digitalWrite(4,1);
     correctFrequency = 146.8;
   }
   if(frequency>186 && frequency<205){
-    otherLEDsOff(2,3,5,6,7);
+    
     digitalWrite(5,1);
     correctFrequency = 196;
   }
   if(frequency>235 && frequency<255){
-    otherLEDsOff(2,4,5,6,7);
+    
     digitalWrite(6,1);
     correctFrequency = 246.9;
   }
   if(frequency>320 && frequency<340){
-    otherLEDsOff(3,4,5,6,7);
+    
     digitalWrite(7,1);
     correctFrequency = 329.6;
   }
 }
 
 //Compare the frequency input to the correct 
-//frequency and light up the appropriate LEDS
+//frequency
 void frequencyCheck(){
   if(frequency>correctFrequency+1){
     analogWrite(A3,255);
@@ -244,25 +238,17 @@ void frequencyCheck(){
   }
 }
 
-void allLEDsOff(){
-  digitalWrite(2,0);
-  digitalWrite(3,0);
-  digitalWrite(4,0);
-  digitalWrite(5,0);
-  digitalWrite(6,0);
-  digitalWrite(7,0);
-  digitalWrite(8,0);
-  digitalWrite(9,0);
-  analogWrite(A1,0);
-  analogWrite(A2,0);
-  analogWrite(A3,0);
-  analogWrite(A4,0);
-  analogWrite(A5,0);
+
+
+void input(){
+  if(frequency<(440*1.03) && frequency>(440*0.97))
+   Keyboard.println("Lol kek azaza"); 
 }
+
 
 void loop(){
   
-  allLEDsOff();
+  
   
   if (checkMaxAmp>ampThreshold){
     frequency = 38462/float(period);//calculate frequency timer rate/period
@@ -270,6 +256,7 @@ void loop(){
   
   stringCheck();
   frequencyCheck();
+  input();
   
   delay(100);
  
