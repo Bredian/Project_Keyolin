@@ -26,11 +26,14 @@
   of each of the frequencies that compose the signal are calculated. Finally,
   the frequency with the highest peak is obtained, being that the main frequency
   present in the signal.
+
 */
 
 #include "arduinoFFT.h"
 #include "table.h"
 #include <Keyboard.h>
+/*Seems like with current setup only 12 buttons can be recignised*/
+#define THREHOLD 1000
 arduinoFFT FFT = arduinoFFT(); /* Create FFT object */
 /*
 These values can be changed in order to evaluate the functions
@@ -70,24 +73,19 @@ void loop()
     vImag[i] = 0.0; //Imaginary part must be zeroed in case of looping to avoid wrong calculations and overflows
   }
   /* Print the results of the simulated sampling according to time */
-  //Serial.println("Data:");
-  //PrintVector(vReal, samples, SCL_TIME);
-  //FFT.Windowing(vReal, samples, FFT_WIN_TYP_HAMMING, FFT_FORWARD);	/* Weigh data */
-  //Serial.println("Weighed data:");
-  //PrintVector(vReal, samples, SCL_TIME);
+
   FFT.Compute(vReal, vImag, samples, FFT_FORWARD); /* Compute FFT */
-  //Serial.println("Computed Real values:");
-  //PrintVector(vReal, samples, SCL_INDEX);
-  //Serial.println("Computed Imaginary values:");
-  //PrintVector(vImag, samples, SCL_INDEX);
+
   FFT.ComplexToMagnitude(vReal, vImag, samples); /* Compute magnitudes */
-  //Serial.println("Computed magnitudes:");
-  //PrintVector(vReal, (samples >> 1), SCL_FREQUENCY);
+
+   //First look Major Magnitude. If it is lower then Threhold - do not work with that
+  if(FFT.MajorPeakMagnitude(vReal, samples,samplingFrequency)>THREHOLD){
   double x = FFT.MajorPeak(vReal, samples, samplingFrequency);
   Serial.println(x, 6);
   //while(1); /* Run Once */
   button(x,"violin");
   delay(500); /* Repeat after delay */
+  }
 }
 
 void PrintVector(double *vData, uint16_t bufferSize, uint8_t scaleType)

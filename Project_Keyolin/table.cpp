@@ -2,56 +2,64 @@
 #include "table.h"
 #include "Arduino.h"
 #include <Keyboard.h>
-
+int shift=0, control=0; 
 void button(double value, char * instrument){
-  int shift=0, control=0; 
+
   if(strcmp(instrument,"violin")==0){
+    
+    if(shift==1) Serial.println("Shift");
+    if(control==1) Serial.println("control");
     /*First test: write 'kek' and delete it - passed*/
-	  if(value>=530 && value<=549 )
+	  if(value>=520 && value<=540 )
 		  Keyboard.write('k');
-	  if(value>=550 && value<=570)
+	  if((value>=274 && value<=280) || (value>=550 && value<=560))
 		  Keyboard.write('e');
-	  if(value>=300 && value<=316)
+	  if(value>=300 && value<=313)    
+     
 		  Keyboard.write(' ');	
-		if(value>=940 && value<=950){
-		  Keyboard.press(KEY_BACKSPACE);
+		if(value>=314 && value<=320){
+		  Keyboard.press( KEY_BACKSPACE);
 		  Keyboard.release(KEY_BACKSPACE);
 	  }
    /*Second test: multiline text - 2 lines 'lol'*/
-    if(value>=660 && value<=683){
+    if(value>=340 && value<=350){
       Keyboard.press(KEY_RETURN);
       Keyboard.release(KEY_RETURN);
     }
-    if(value>=1410 && value<=1430)
+    if(value>=350 && value<=360)
       Keyboard.write('l');
-    if(value>=1860 && value<=1900)
+    if(value>=380 && value<=390)
       Keyboard.write('o');
     /*Third test: make capitals*/
     if(value>=390 && value<=400){
       if(shift==0){
         shift=1;
         Keyboard.press(KEY_LEFT_SHIFT);
+        return;
       }
-      else{
+      if(shift==1){
         shift=0;
         Keyboard.release(KEY_LEFT_SHIFT);
+        return;
       }
     }
     /*Fourth test: change language*/
-    if(value>=840 && value<=850){
-      if(shift==0){
+    if(value>=420 && value<=433){
+      if(control==0){
         control=1;
         Keyboard.press(KEY_LEFT_CTRL);
+        return;
       }
       else{
         control=0;
         Keyboard.release(KEY_LEFT_CTRL);
+        return;
       }
     }
     /*Letters for azaza*/
-    if(value>=900 && value<=910)
+    if(value>=435 && value<=450)
       Keyboard.write('a');
-    if(value>=940 && value<=950)
+    if(value>=470 && value<=480)
       Keyboard.write('z');
   }
 } 
