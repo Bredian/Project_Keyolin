@@ -84,9 +84,7 @@ void loop()
   double x = FFT.MajorPeak(vReal, samples, samplingFrequency);
   Serial.println(x, 6);
   //while(1); /* Run Once */
-  NAHUI_TEORMEH=NOTE(x);
   Wire.beginTransmission(8);
-  Wire.write(NAHUI_TEORMEH);
   Wire.endTransmission();
  /* Repeat after delay */
   }
