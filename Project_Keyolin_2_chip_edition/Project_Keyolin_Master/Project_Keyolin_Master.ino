@@ -49,7 +49,6 @@ Input vectors receive computed results from FFT
 */
 double vReal[samples];
 double vImag[samples];
-char NAHUI_TEORMEH;
 #define SCL_INDEX 0x00
 #define SCL_TIME 0x01
 #define SCL_FREQUENCY 0x02
